@@ -25,27 +25,21 @@ public class MainPageBurgers {
     //локатор заголовка "Начинки"
     @FindBy(how = How.XPATH,using = ".//h2[text()='Начинки']")
     private SelenideElement headerFillings;
-    //локатор раздела "Начинки" после клика на него
-    @FindBy(how = How.XPATH,using = ".//span[text()='Начинки']")
-    private SelenideElement headerFillingsVisibleAfterClick;
     //локатор раздела "Соусы"
     @FindBy(how = How.XPATH,using = ".//span[text()='Соусы']")
     private SelenideElement sauces;
     //локатор заголовка "Соусы"
     @FindBy(how = How.XPATH,using = ".//h2[text()='Соусы']")
     private SelenideElement headerSauces;
-    //локатор раздела "Соусы" после клика на него
-    @FindBy(how = How.XPATH,using = ".//span[text()='Соусы']")
-    private SelenideElement headerSaucesVisibleAfterClick;
     //локатор раздела "Булки"
     @FindBy(how = How.XPATH,using = "//span[contains(text(),'Булки')]")
     private SelenideElement buns;
     //локатор заголовка "Булки"
     @FindBy(how = How.XPATH,using = ".//h2[text()='Булки']")
     private SelenideElement headerBuns;
-    //локатор раздела "Булки" после клика на него
-    @FindBy(how = How.XPATH,using = ".//span[text()='Булки']")
-    private SelenideElement headerBunsVisibleAfterClick;
+    //локатор выбранного раздела после клика на него
+    @FindBy(how = How.CLASS_NAME, using = "tab_tab_type_current__2BEPc")
+    private SelenideElement headerVisibleAfterClick;
     //локатор кнопки "Оформить заказ"
     @FindBy(how = How.XPATH,using = "//section[2]/div/button[text()='Оформить заказ']")
     private SelenideElement checkoutButton;
@@ -66,7 +60,7 @@ public class MainPageBurgers {
     }
     //метод нахождения заголовка "Начинки"
     public boolean isHeaderFillingVisible() {
-        return headerFillingsVisibleAfterClick.getText().contentEquals("Начинки");
+        return headerVisibleAfterClick.getText().contentEquals("Начинки");
     }
     //метод клика по разделу "Соусы"
     @Step("Клик по разделу \"Соусы\"")
@@ -76,7 +70,7 @@ public class MainPageBurgers {
     }
     //метод нахождения заголовка "Соусы"
     public boolean isHeaderSaucesVisible() {
-        return headerSaucesVisibleAfterClick.getText().contentEquals("Соусы");
+        return headerVisibleAfterClick.getText().contentEquals("Соусы");
     }
     //метод клика по разделу "Булки"
     @Step("Клик по разделу \"Булки\"")
@@ -86,7 +80,7 @@ public class MainPageBurgers {
     }
     //метод нахождения заголовка "Булки"
     public boolean isHeaderBunsVisible() {
-        return headerBunsVisibleAfterClick.getText().contentEquals("Булки");
+        return headerVisibleAfterClick.getText().contentEquals("Булки");
     }
     //метод нахождения кнопки "Оформить заказ"
     public boolean isCheckoutButtonDisplayed() {

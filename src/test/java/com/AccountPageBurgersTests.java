@@ -1,12 +1,12 @@
 package com;
 
 import com.codeborne.selenide.Configuration;
+import com.po.AccountPageBurgers;
 import com.po.LoginPageBurgers;
 import com.po.MainPageBurgers;
-import com.po.AccountPageBurgers;
 import com.po.RegistrationPageBurgers;
+import com.info.InfoForCreateNewUser;
 import io.qameta.allure.Description;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 public class AccountPageBurgersTests {
 
-    static String name = RandomStringUtils.randomAlphabetic(10);
-    static String email = RandomStringUtils.randomAlphabetic(10) + "@yandex.ru";
-    static String password = RandomStringUtils.randomAlphabetic(10);
+    private static InfoForCreateNewUser user = InfoForCreateNewUser.getRandomWithCorrectPassword();
 
     @Before
     public void setup() {
@@ -31,7 +29,7 @@ public class AccountPageBurgersTests {
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
         loginPage.clickRegister();
         RegistrationPageBurgers registrationPage = page(RegistrationPageBurgers.class);
-        registrationPage.fillFormRegistration(name, email, password);
+        registrationPage.fillFormRegistration(user);
     }
 
     @After
@@ -47,7 +45,7 @@ public class AccountPageBurgersTests {
         MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
         mainPage.clickLoginButton();
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         mainPage.clickPersonalAccountButton();
         AccountPageBurgers accountProfile = page(AccountPageBurgers.class);
         assertTrue(accountProfile.isExitDisplayed());
@@ -60,7 +58,7 @@ public class AccountPageBurgersTests {
         MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
         mainPage.clickLoginButton();
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         mainPage.clickPersonalAccountButton();
         AccountPageBurgers accountProfile = page(AccountPageBurgers.class);
         accountProfile.clickConstructorButton();
@@ -74,7 +72,7 @@ public class AccountPageBurgersTests {
         MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
         mainPage.clickLoginButton();
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         mainPage.clickPersonalAccountButton();
         AccountPageBurgers accountProfile = page(AccountPageBurgers.class);
         accountProfile.clickLogoStellar();
@@ -88,7 +86,7 @@ public class AccountPageBurgersTests {
         MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
         mainPage.clickLoginButton();
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         mainPage.clickPersonalAccountButton();
         AccountPageBurgers accountProfile = page(AccountPageBurgers.class);
         accountProfile.clickExit();

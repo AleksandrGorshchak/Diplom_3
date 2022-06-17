@@ -1,6 +1,7 @@
 package com.po;
 
 import com.codeborne.selenide.SelenideElement;
+import com.info.InfoForCreateNewUser;
 import io.qameta.allure.Step;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -46,10 +47,10 @@ public class RegistrationPageBurgers {
         registerButton.click();
     }
     //метод для заполнения полей "Имя", "Email", "Пароль"и для клика по кнопке "Зарегистрироваться"
-    public void fillFormRegistration(String name, String email,String password) {
-        setNameField(name);
-        setEmailField(email);
-        setPasswordField(password);
+    public void fillFormRegistration(InfoForCreateNewUser info) {
+        setNameField(info.name);
+        setEmailField(info.email);
+        setPasswordField(info.password);
         clickRegisterButton();
     }
     //метод клика по тексту "Войти"

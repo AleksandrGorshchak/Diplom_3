@@ -1,12 +1,15 @@
 package com;
 
+import com.client.UserClient;
 import com.codeborne.selenide.Configuration;
 import com.po.ForgotPasswordPageBurgers;
 import com.po.LoginPageBurgers;
 import com.po.MainPageBurgers;
 import com.po.RegistrationPageBurgers;
+import com.info.InfoForCreateNewUser;
+import com.info.UserCredentials;
 import io.qameta.allure.Description;
-import org.apache.commons.lang3.RandomStringUtils;
+import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,25 +20,22 @@ import static org.junit.Assert.assertTrue;
 
 public class LoginPageBurgersTests {
 
-    String name = RandomStringUtils.randomAlphabetic(10);
-    String email = RandomStringUtils.randomAlphabetic(10) + "@yandex.ru";
-    String password = RandomStringUtils.randomAlphabetic(10);
+    private InfoForCreateNewUser user;
+    private UserClient userClient;
 
     @Before
     public void setup() {
 
+        user = InfoForCreateNewUser.getRandomWithCorrectPassword();
+        userClient = new UserClient();
         Configuration.startMaximized = true;
-        MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
-        mainPage.clickPersonalAccountButton();
-        LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.clickRegister();
-        RegistrationPageBurgers registrationPage = page(RegistrationPageBurgers.class);
-        registrationPage.fillFormRegistration(name, email, password);
+        userClient.create(user);
     }
 
     @After
     public void tearDown() {
-
+        String accessToken = getAccessToken(user);
+        userClient.delete(accessToken);
         closeWebDriver();
     }
 
@@ -46,7 +46,7 @@ public class LoginPageBurgersTests {
         MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
         mainPage.clickLoginButton();
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         assertTrue(mainPage.isCheckoutButtonDisplayed());
     }
 
@@ -57,7 +57,7 @@ public class LoginPageBurgersTests {
         MainPageBurgers mainPage = open(HOME_PAGE_BURGERS, MainPageBurgers.class);
         mainPage.clickPersonalAccountButton();
         LoginPageBurgers loginPage = page(LoginPageBurgers.class);
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         assertTrue(mainPage.isCheckoutButtonDisplayed());
     }
 
@@ -71,7 +71,7 @@ public class LoginPageBurgersTests {
         loginPage.clickRegister();
         RegistrationPageBurgers registrationPage = page(RegistrationPageBurgers.class);
         registrationPage.clickLogin();
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         assertTrue(mainPage.isCheckoutButtonDisplayed());
     }
 
@@ -85,8 +85,14 @@ public class LoginPageBurgersTests {
         loginPage.clickRecoverPassword();
         ForgotPasswordPageBurgers forgotPassword = page(ForgotPasswordPageBurgers.class);
         forgotPassword.clickLogin();
-        loginPage.fillFormLogin(email, password);
+        loginPage.fillFormLogin(user.email, user.password);
         assertTrue(mainPage.isCheckoutButtonDisplayed());
+    }
+
+    private String getAccessToken(InfoForCreateNewUser infoForCreateNewUser) {
+        UserCredentials userCredentials = new UserCredentials(infoForCreateNewUser.email, infoForCreateNewUser.password);
+        ValidatableResponse response = userClient.login(userCredentials);
+        return response.extract().path("accessToken");
     }
 }
 
